@@ -2,6 +2,11 @@
 - name: Install Docker and Docker Compose on Ubuntu
   hosts: all
   become: yes
+  vars:
+    docker_compose_version: "2.24.5"
+    docker_users:
+      - "{{ ansible_user }}"
+      
   tasks:
     - name: Install required packages
       apt:
