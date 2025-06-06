@@ -5,8 +5,7 @@
   vars:
     docker_compose_version: "2.24.5"
     ubuntu_release: "noble"
-    docker_users:
-      - "{{ ansible_user }}"
+    docker_user: "{{ ansible_user }}"
       
   tasks:
     - name: Install required packages
@@ -40,14 +39,12 @@
         state: present
         update_cache: yes
 
+    - name: Add user to the Docker group
+      ansible.builtin.shell: |
+        sudo usermod -aG docker {{ docker_user }}
+
     - name: Ensure Docker service is started and enabled
       service:
         name: docker
         state: started
         enabled: yes
-
-    #- name: Install Docker Compose
-    #  get_url:
-    #    url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
-    #    dest: /usr/local/bin/docker-compose
-    #    mode: '0755'
